@@ -1,12 +1,14 @@
 package gr8pefish.ironbackpacks.registry;
 
 import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.IBackpack;
+import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.IColorable;
 import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.ITieredBackpack;
 import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.IUpgradableBackpack;
 import gr8pefish.ironbackpacks.api.register.IAllRecipesRegistry;
 import gr8pefish.ironbackpacks.api.register.ItemIBackpackRegistry;
 import gr8pefish.ironbackpacks.api.register.ItemIUpgradeRegistry;
 import gr8pefish.ironbackpacks.config.ConfigHandler;
+import gr8pefish.ironbackpacks.crafting.BackpackAddDyeColorRecipe;
 import gr8pefish.ironbackpacks.crafting.BackpackAddUpgradeRecipe;
 import gr8pefish.ironbackpacks.crafting.BackpackIncreaseTierRecipe;
 import gr8pefish.ironbackpacks.crafting.BackpackRemoveUpgradeRecipe;
@@ -47,6 +49,7 @@ public class RecipeRegistry {
         registerBackpackTierRecipes(); //register the recipes to upgrade a backpack to the next tier
 		registerBackpackUpgradeRemovalRecipes(); //register the recipes to remove upgrades from backpacks
         registerBackpackUpgradeAdditionRecipes(); //register the recipes to add upgrades from backpacks
+        registerBackpackAddDyeColorRecipes(); //register the recipes to add dyes to color backpacks
 
 
 	}
@@ -162,7 +165,7 @@ public class RecipeRegistry {
     /**
      * Register the recipe for the backpack to increase a tier.
      */
-    public static void registerBackpackTierRecipes(){
+    private static void registerBackpackTierRecipes(){
         for (int i = 0; i < ItemIBackpackRegistry.getSize(); i++){
             IBackpack backpack = ItemIBackpackRegistry.getBackpackAtIndex(i);
             if (backpack instanceof ITieredBackpack) {
@@ -174,8 +177,21 @@ public class RecipeRegistry {
                     for (int j = 0; j < recipes.size(); j++) {
                         BackpackIncreaseTierRecipe tierRecipe = new BackpackIncreaseTierRecipe(new ItemStack((ItemBackpack)upgradedPacks.get(j)), recipes.get(j)); //hardcoded to ItemBackpack
                         GameRegistry.addRecipe(tierRecipe);
-                        IAllRecipesRegistry.registerTierIncreaseRecipe(tierRecipe);
+                        IAllRecipesRegistry.registerTierIncreaseRecipe(tierRecipe); //ToDo: Useless, remove these
                     }
+                }
+            }
+        }
+    }
+
+    private static void registerBackpackAddDyeColorRecipes() {
+        for (int i = 0; i < ItemIBackpackRegistry.getSize(); i++){
+            IBackpack backpack = ItemIBackpackRegistry.getBackpackAtIndex(i);
+            if (backpack instanceof IColorable) {
+                ArrayList<String> dyes = BackpackAddDyeColorRecipe.getOreDictDyeNames();
+                for (String dye: dyes) {
+                    BackpackAddDyeColorRecipe recipe = new BackpackAddDyeColorRecipe(new ItemStack((ItemBackpack) backpack), new ItemStack((ItemBackpack) backpack), dye); //Hardcoded to ItemBackpack
+                    GameRegistry.addRecipe(recipe);
                 }
             }
         }

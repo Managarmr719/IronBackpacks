@@ -99,6 +99,7 @@ public class IronBackpacksConstants {
         public static final String SORT_TYPE = "SortType";
         public static final String ADDED_ALT_GUI = "AddedAltGui";
         public static final String REMOVED_ALT_GUI = "RemovedAltGui";
+        public static final String COLOR = "Color";
     }
 
     //Achievements

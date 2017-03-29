@@ -35,13 +35,7 @@ public class BackpackIncreaseTierRecipe extends ShapedOreRecipe implements IIncr
         ItemStack backpack = getFirstTieredBackpack(inventoryCrafting);
         if (backpack == null) return null;
 
-        NBTTagCompound nbtTagCompound = backpack.getTagCompound();
-        if (nbtTagCompound == null){
-            nbtTagCompound = new NBTTagCompound();
-            nbtTagCompound.setTag(IronBackpacksConstants.NBTKeys.ITEMS, new NBTTagList());
-            nbtTagCompound.setTag(IronBackpacksConstants.NBTKeys.UPGRADES, new NBTTagList());
-            backpack.setTagCompound(nbtTagCompound);
-        }
+        RecipeHelper.initNBTIfBlank(backpack);
 
         //get the higher tier backpack if it exists
         List<ITieredBackpack> backpacksAbove = null;

@@ -1,17 +1,25 @@
 package gr8pefish.ironbackpacks.proxies;
 
 import gr8pefish.ironbackpacks.api.Constants;
+import gr8pefish.ironbackpacks.api.items.backpacks.ItemIUpgradableITieredBackpack;
+import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.IBackpack;
+import gr8pefish.ironbackpacks.api.items.backpacks.interfaces.IColorable;
+import gr8pefish.ironbackpacks.api.register.ItemIBackpackRegistry;
 import gr8pefish.ironbackpacks.client.ClientEventHandler;
 import gr8pefish.ironbackpacks.client.KeyHandler;
 import gr8pefish.ironbackpacks.client.renderer.LayerBackpack;
 import gr8pefish.ironbackpacks.config.ConfigAdaptor;
+import gr8pefish.ironbackpacks.registry.ItemRegistry;
 import gr8pefish.ironbackpacks.registry.ProxyRegistry;
 import gr8pefish.ironbackpacks.util.IronBackpacksConstants;
 import gr8pefish.ironbackpacks.util.Logger;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -32,6 +40,7 @@ public class ClientProxy extends CommonProxy {
 
         //initialize extra layer for rendering the backpack on the player
         addBackpackModelLayer();
+        addBackpackColors();
 
         ProxyRegistry.initClient();
     }
@@ -79,6 +88,27 @@ public class ClientProxy extends CommonProxy {
         } catch (Exception e) {
             Logger.error("Failed to add Layer Backpack!");
             Logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * Add the 16 colors to backpacks.
+     */
+    private void addBackpackColors() {
+
+        for (int i = 0; i < ItemIBackpackRegistry.getSize(); i++) {
+
+            Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+                @Override
+                public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+                    if (stack.getItem() instanceof IColorable) {
+                        IColorable colorable = (IColorable) stack.getItem();
+                        return colorable.getColor(stack).getRGB(); //ToDo: crashes
+                    }
+                    return -1;
+                }
+            }, (ItemIUpgradableITieredBackpack)ItemIBackpackRegistry.getBackpackAtIndex(i)); //ToDo: Dangerous typecasting
+
         }
     }
 

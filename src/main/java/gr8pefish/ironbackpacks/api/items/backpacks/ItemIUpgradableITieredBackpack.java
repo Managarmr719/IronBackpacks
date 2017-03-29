@@ -200,23 +200,23 @@ public class ItemIUpgradableITieredBackpack extends Item implements IUpgradableB
 
 
     @Override
-    public boolean isColored() {
+    public boolean isColored(ItemStack stack) {
         return this.isColored;
     }
 
     @Override
-    public Color getColor() {
+    public Color getColor(ItemStack stack) {
         return this.color;
     }
 
     @Override
-    public void applyColor(Color color) {
+    public void applyColor(ItemStack stack, Color color) {
         this.color = color;
         this.isColored = true;
     }
 
     @Override
-    public void removeColor() {
+    public void removeColor(ItemStack stack) {
         if (this.isColored) {
             this.isColored = false;
             this.color = null;

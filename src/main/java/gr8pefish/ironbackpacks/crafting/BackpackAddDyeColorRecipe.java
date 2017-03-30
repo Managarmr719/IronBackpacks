@@ -57,8 +57,8 @@ public class BackpackAddDyeColorRecipe extends ShapelessOreRecipe {
         IColorable colorableBackpack = (IColorable) backpack.getItem();
         Color color = getDyeColor(dyeToApplyColor);
         if (color != null) {
-            colorableBackpack.applyColor(result, color); //ToDo
-            nbtTagCompound.setTag(IronBackpacksConstants.NBTKeys.COLOR, new NBTTagInt(color.getRGB()));
+            colorableBackpack.applyColor(result, color);
+//            nbtTagCompound.setTag(IronBackpacksConstants.NBTKeys.COLOR, new NBTTagInt(color.getRGB())); //ToDo: Fails here (negative number?) Could make custom enum w/rgb values
         }
         result = new ItemStack(recipeOutput.getItem());
         result.setTagCompound(backpack.getTagCompound());

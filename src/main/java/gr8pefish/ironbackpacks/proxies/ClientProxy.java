@@ -98,15 +98,13 @@ public class ClientProxy extends CommonProxy {
 
         for (int i = 0; i < ItemIBackpackRegistry.getSize(); i++) {
 
-            Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                @Override
-                public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                    if (stack.getItem() instanceof IColorable) {
-                        IColorable colorable = (IColorable) stack.getItem();
+            Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+                if (stack != null && stack.getItem() instanceof IColorable) {
+                    IColorable colorable = (IColorable) stack.getItem();
+                    if (colorable.isColored(stack))
                         return colorable.getColor(stack).getRGB(); //ToDo: crashes
-                    }
-                    return -1;
                 }
+                return -1;
             }, (ItemIUpgradableITieredBackpack)ItemIBackpackRegistry.getBackpackAtIndex(i)); //ToDo: Dangerous typecasting
 
         }
